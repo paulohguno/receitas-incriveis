@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { Analytics } from "@vercel/analytics/next" 
 
 const courses = [
     {
@@ -14,7 +15,7 @@ const courses = [
         textColor: "text-white",
         btnStyle: "bg-white/10 text-white border-white/30",
     },
-    {
+    { 
         id: 2,
         title: "Petiscos e Docinhos",
         subtitle: "Receitas Gourmets exclusivas",
