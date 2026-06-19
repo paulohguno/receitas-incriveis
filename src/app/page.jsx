@@ -196,7 +196,7 @@ function CourseSection({ course, index }) {
             </div>
 
             <div
-                className={`absolute z-30 flex transition-all duration-500 ease-in-out w-full justify-center bottom-6 md:w-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2 ${isLeft ? "md:right-10" : "md:left-10"} ${hasTouched ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-90 pointer-events-none"} md:opacity-0 md:scale-90 md:pointer-events-none md:group-hover:opacity-100 md:group-hover:scale-100 md:group-hover:pointer-events-auto`}
+                className={`absolute z-30 flex transition-all duration-500 ease-in-out w-full justify-center bottom-6 md:w-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2 ${isLeft ? "md:right-10" : "md:left-10"} ${hasTouched ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-90 pointer-events-none"} md:opacity-100 md:scale-100 md:pointer-events-auto`}
             >
                 <a
                     href={course.href}
