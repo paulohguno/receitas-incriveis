@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -38,7 +39,6 @@ const courses = [
         textColor: "text-white",
         btnStyle: "bg-white/10 text-white border-white/30",
     },
-
 ];
 
 function InteractiveGrid({ mouseRef }) {
@@ -158,37 +158,29 @@ function InteractiveGrid({ mouseRef }) {
 }
 
 function CourseSection({ course, index }) {
-    const [hovered, setHovered] = useState(false);
-
     const isLeft = course.slideDir === "left";
-
-    // Modificado: Sobe o texto no mobile e joga para os lados no PC
-    const translateClass = hovered
-        ? isLeft
-            ? "-translate-y-6 md:translate-y-0 md:-translate-x-[20%]"
-            : "-translate-y-6 md:translate-y-0 md:translate-x-[20%]"
-        : "translate-y-0 translate-x-0";
 
     return (
         <section
-            className="relative w-full overflow-hidden cursor-pointer min-h-[25vh] flex-1"
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-            onTouchStart={() => setHovered((v) => !v)}
+            className="group relative w-full overflow-hidden cursor-pointer min-h-[25vh] flex-1"
             aria-label={`Curso: ${course.title}`}
         >
             <div
                 className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${course.bg})` }}
+                style={{
+                    backgroundImage: `url(${course.bg})`,
+                    backgroundPosition: course.bgPosition || "center",
+                }}
             />
 
             <div
-                className={`absolute inset-0 ${course.overlayColor} transition-opacity duration-500 ${hovered ? "opacity-40" : "opacity-70"
-                    }`}
+                className={`absolute inset-0 ${course.overlayColor} transition-opacity duration-500 opacity-40 md:opacity-70 md:group-hover:opacity-40`}
             />
 
             <div
-                className={`absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out ${translateClass}`}
+                className={`absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-y-6 md:translate-y-0 ${
+                    isLeft ? "md:group-hover:-translate-x-[20%]" : "md:group-hover:translate-x-[20%]"
+                }`}
             >
                 <div className="text-center px-8 select-none">
                     <h2
@@ -204,13 +196,13 @@ function CourseSection({ course, index }) {
                 </div>
             </div>
 
-            {/* Modificado: Botão alinhado embaixo no mobile e nas laterais no PC (ajustado para centralizar verticalmente no PC) */}
             <div
                 className={`absolute z-10 flex transition-all duration-500 ease-in-out
                     w-full justify-center bottom-6
                     md:w-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2
                     ${isLeft ? "md:right-10" : "md:left-10"}
-                    ${hovered ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"}
+                    opacity-100 scale-100 pointer-events-auto
+                    md:opacity-0 md:scale-90 md:pointer-events-none md:group-hover:opacity-100 md:group-hover:scale-100 md:group-hover:pointer-events-auto
                 `}
             >
                 <a
@@ -218,11 +210,10 @@ function CourseSection({ course, index }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm md:text-base
-                        shadow-2xl border-2
+                        shadow-2xl border-2 relative z-30
                         transition-transform duration-200 hover:scale-105 active:scale-95
                         ${course.btnStyle}
                     `}
-                    onClick={(e) => e.stopPropagation()}
                 >
                     Acessar curso
                     <svg
@@ -240,9 +231,18 @@ function CourseSection({ course, index }) {
                 </a>
             </div>
 
+            <a 
+                href={course.href} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="absolute inset-0 z-20 md:hidden"
+                aria-label={`Acessar curso ${course.title}`}
+            />
+
             <div
-                className={`absolute top-0 bottom-0 w-1 ${index % 2 === 0 ? "left-0" : "right-0"
-                    } bg-white/20`}
+                className={`absolute top-0 bottom-0 w-1 ${
+                    index % 2 === 0 ? "left-0" : "right-0"
+                } bg-white/20`}
             />
         </section>
     );
