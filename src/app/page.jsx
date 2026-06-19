@@ -158,29 +158,46 @@ function InteractiveGrid({ mouseRef }) {
 }
 
 function CourseSection({ course, index }) {
+    const [isHovered, setIsHovered] = useState(false);
+    const [hasTouched, setHasTouched] = useState(false);
+
     const isLeft = course.slideDir === "left";
+    
+    // Fica ativo se o mouse estiver em cima (PC) OU se a tela foi tocada uma vez (Mobile)
+    const isActive = isHovered || hasTouched;
+
+    const translateClass = isActive
+        ? hasTouched // Se foi toque (mobile), sobe o texto. Se foi hover (PC), joga pro lado.
+            ? "-translate-y-6 md:translate-y-0" + (isLeft ? " md:-translate-x-[20%]" : " md:translate-x-[20%]")
+            : isLeft
+                ? "-translate-y-6 md:translate-y-0 md:-translate-x-[20%]"
+                : "-translate-y-6 md:translate-y-0 md:translate-x-[20%]"
+        : "translate-y-0 translate-x-0";
 
     return (
         <section
-            className="group relative w-full overflow-hidden cursor-pointer min-h-[25vh] flex-1"
+            className="relative w-full overflow-hidden cursor-pointer min-h-[25vh] flex-1"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onTouchStart={() => setHasTouched(true)}
             aria-label={`Curso: ${course.title}`}
         >
             <div
                 className="absolute inset-0 bg-cover bg-center"
-                style={{
+                style={{ 
                     backgroundImage: `url(${course.bg})`,
-                    backgroundPosition: course.bgPosition || "center",
+                    backgroundPosition: course.bgPosition || "center"
                 }}
             />
 
             <div
-                className={`absolute inset-0 ${course.overlayColor} transition-opacity duration-500 opacity-40 md:opacity-70 md:group-hover:opacity-40`}
+                className={`absolute inset-0 ${course.overlayColor} transition-opacity duration-500 ${
+                    isActive ? "opacity-40" : "opacity-70"
+                }`}
             />
 
             <div
-                className={`absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out -translate-y-6 md:translate-y-0 ${
-                    isLeft ? "md:group-hover:-translate-x-[20%]" : "md:group-hover:translate-x-[20%]"
-                }`}
+                className={`absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out ${translateClass}`}
             >
                 <div className="text-center px-8 select-none">
                     <h2
@@ -197,12 +214,11 @@ function CourseSection({ course, index }) {
             </div>
 
             <div
-                className={`absolute z-10 flex transition-all duration-500 ease-in-out
+                className={`absolute z-20 flex transition-all duration-500 ease-in-out
                     w-full justify-center bottom-6
                     md:w-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2
                     ${isLeft ? "md:right-10" : "md:left-10"}
-                    opacity-100 scale-100 pointer-events-auto
-                    md:opacity-0 md:scale-90 md:pointer-events-none md:group-hover:opacity-100 md:group-hover:scale-100 md:group-hover:pointer-events-auto
+                    ${isActive ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-90 pointer-events-none"}
                 `}
             >
                 <a
@@ -210,10 +226,11 @@ function CourseSection({ course, index }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm md:text-base
-                        shadow-2xl border-2 relative z-30
+                        shadow-2xl border-2 relative
                         transition-transform duration-200 hover:scale-105 active:scale-95
                         ${course.btnStyle}
                     `}
+                    onClick={(e) => e.stopPropagation()}
                 >
                     Acessar curso
                     <svg
@@ -231,13 +248,16 @@ function CourseSection({ course, index }) {
                 </a>
             </div>
 
-            <a 
-                href={course.href} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="absolute inset-0 z-20 md:hidden"
-                aria-label={`Acessar curso ${course.title}`}
-            />
+            {/* Link invisível para mobile só fica ativo se o card já foi tocado para revelar */}
+            {hasTouched && (
+                <a 
+                    href={course.href} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="absolute inset-0 z-10 md:hidden"
+                    aria-label={`Acessar curso ${course.title}`}
+                />
+            )}
 
             <div
                 className={`absolute top-0 bottom-0 w-1 ${
