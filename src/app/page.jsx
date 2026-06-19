@@ -175,17 +175,11 @@ function CourseSection({ course, index }) {
             />
 
             <div
-                className={`absolute inset-0 ${course.overlayColor} transition-opacity duration-500 
-                    ${hasTouched ? "opacity-40" : "opacity-70"} 
-                    md:opacity-70 md:group-hover:opacity-40
-                `}
+                className={`absolute inset-0 ${course.overlayColor} transition-opacity duration-500 ${hasTouched ? "opacity-40" : "opacity-70"} md:opacity-70 md:group-hover:opacity-40`}
             />
 
             <div
-                className={`absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out
-                    ${hasTouched ? "-translate-y-6 md:translate-y-0" : "translate-y-0 translate-x-0"}
-                    ${isLeft ? "md:group-hover:-translate-x-[20%]" : "md:group-hover:translate-x-[20%]"}
-                `}
+                className={`absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out ${hasTouched ? "-translate-y-6" : "translate-y-0"} md:translate-y-0 ${isLeft ? "md:group-hover:-translate-x-[20%]" : "md:group-hover:translate-x-[20%]"}`}
             >
                 <div className="text-center px-8 select-none pointer-events-none">
                     <h2
@@ -202,24 +196,13 @@ function CourseSection({ course, index }) {
             </div>
 
             <div
-                className={`absolute z-20 flex transition-all duration-500 ease-in-out
-                    w-full justify-center bottom-6
-                    md:w-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2
-                    ${isLeft ? "md:right-10" : "md:left-10"}
-                    
-                    ${hasTouched ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-90 pointer-events-none"}
-                    md:opacity-0 md:scale-90 md:pointer-events-none md:group-hover:opacity-100 md:group-hover:scale-100 md:group-hover:pointer-events-auto
-                `}
+                className={`absolute z-30 flex transition-all duration-500 ease-in-out w-full justify-center bottom-6 md:w-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2 ${isLeft ? "md:right-10" : "md:left-10"} ${hasTouched ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-90 pointer-events-none"} md:opacity-0 md:scale-90 md:pointer-events-none md:group-hover:opacity-100 md:group-hover:scale-100 md:group-hover:pointer-events-auto`}
             >
                 <a
                     href={course.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm md:text-base cursor-pointer
-                        shadow-2xl border-2 relative
-                        transition-transform duration-200 hover:scale-105 active:scale-95
-                        ${course.btnStyle}
-                    `}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm md:text-base cursor-pointer shadow-2xl border-2 relative transition-transform duration-200 hover:scale-105 active:scale-95 ${course.btnStyle}`}
                     onClick={(e) => e.stopPropagation()}
                 >
                     Acessar curso
