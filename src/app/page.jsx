@@ -157,26 +157,12 @@ function InteractiveGrid({ mouseRef }) {
 }
 
 function CourseSection({ course, index }) {
-    const [isHovered, setIsHovered] = useState(false);
     const [hasTouched, setHasTouched] = useState(false);
-
     const isLeft = course.slideDir === "left";
-    
-    const isActive = isHovered || hasTouched;
-
-    const translateClass = isActive
-        ? hasTouched 
-            ? "-translate-y-6 md:translate-y-0" + (isLeft ? " md:-translate-x-[20%]" : " md:translate-x-[20%]")
-            : isLeft
-                ? "-translate-y-6 md:translate-y-0 md:-translate-x-[20%]"
-                : "-translate-y-6 md:translate-y-0 md:translate-x-[20%]"
-        : "translate-y-0 translate-x-0";
 
     return (
         <section
-            className="relative w-full overflow-hidden min-h-[25vh] flex-1"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            className="group relative w-full overflow-hidden min-h-[25vh] flex-1"
             onTouchStart={() => setHasTouched(true)}
             aria-label={`Curso: ${course.title}`}
         >
@@ -189,15 +175,19 @@ function CourseSection({ course, index }) {
             />
 
             <div
-                className={`absolute inset-0 ${course.overlayColor} transition-opacity duration-500 ${
-                    isActive ? "opacity-40" : "opacity-70"
-                }`}
+                className={`absolute inset-0 ${course.overlayColor} transition-opacity duration-500 
+                    ${hasTouched ? "opacity-40" : "opacity-70"} 
+                    md:opacity-70 md:group-hover:opacity-40
+                `}
             />
 
             <div
-                className={`absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out ${translateClass}`}
+                className={`absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-in-out
+                    ${hasTouched ? "-translate-y-6 md:translate-y-0" : "translate-y-0 translate-x-0"}
+                    ${isLeft ? "md:group-hover:-translate-x-[20%]" : "md:group-hover:translate-x-[20%]"}
+                `}
             >
-                <div className="text-center px-8 select-none">
+                <div className="text-center px-8 select-none pointer-events-none">
                     <h2
                         className={`text-3xl md:text-4xl font-black tracking-tight drop-shadow-lg ${course.textColor}`}
                     >
@@ -216,7 +206,9 @@ function CourseSection({ course, index }) {
                     w-full justify-center bottom-6
                     md:w-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2
                     ${isLeft ? "md:right-10" : "md:left-10"}
-                    ${isActive ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-90 pointer-events-none"}
+                    
+                    ${hasTouched ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-90 pointer-events-none"}
+                    md:opacity-0 md:scale-90 md:pointer-events-none md:group-hover:opacity-100 md:group-hover:scale-100 md:group-hover:pointer-events-auto
                 `}
             >
                 <a
